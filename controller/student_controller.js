@@ -29,7 +29,7 @@ exports.Login = async (request, response) => {
 
         tokenPayLoad = JSON.stringify(tokenPayLoad)
 
-        let Token = await jsonwebtoken.sign(tokenPayLoad, SECRET_KEY, {expiresIn:"1h"})
+        let Token = await jsonwebtoken.sign(tokenPayLoad, SECRET_KEY,)
 
         return response.status(200).json({
             status: true,
