@@ -11,10 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.student)
-      this.belongsTo(models.teacher)
-      this.hasMany(models.offline, {
-        foreignKey: 'id_conseling', as: "offline"
+      this.belongsTo(models.student,{
+        foreignKey: 'id_student', as: "student"
+      })
+      this.belongsTo(models.teacher,{
+        foreignKey: 'id_teacher', as: "teacher"
+      })
+      this.hasOne(models.offline, {
+        foreignKey: 'id_conseling'
       })
       this.hasMany(models.online, {
         foreignKey: 'id_conseling', as: "online"
@@ -30,7 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    id_student: DataTypes.INTEGER,
+    id_student: {
+      type:DataTypes.INTEGER,
+      allowNull: false,
+    },
     id_teacher: DataTypes.INTEGER,
     category: DataTypes.STRING,
     isclosed: DataTypes.BOOLEAN
