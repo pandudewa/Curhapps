@@ -21,7 +21,6 @@ exports.Login = async (request, response) => {
         if (findTeacher == null) {
             return response.status(404).json({
                 message: "NIK or password doesn't match",
-                err: ''
             })
         }
 
@@ -55,32 +54,86 @@ exports.Login = async (request, response) => {
         });
     };
 };
-exports.requestAppointment= async (request, response)=>{
+
+exports.requestAppointment = async (request, response) => {
     const counseling = await conselingModel.findAll({
         attributes: ['id_conseling'],
-        include: 
-        [
-            {
-                attributes: ['student_name'],
-                model: studentModel,
-                required: true,
-                as : 'student'
-            },
-            {
-                attributes: [],
-                model: teacherModel,
-                required: true,
-                as : 'teacher'
-            },
-            {
-                attributes: ['meeting_date','aproval'],
-                model: offlineModel,
-                required: true,
-                where:{
-                    aproval: null
+        include:
+            [
+                {
+                    attributes: ['student_name'],
+                    model: studentModel,
+                    required: true,
+                    as: 'student'
+                },
+                {
+                    attributes: [],
+                    model: teacherModel,
+                    required: true,
+                    as: 'teacher'
+                },
+                {
+                    attributes: ['meeting_date', 'aproval'],
+                    model: offlineModel,
+                    required: true,
+                    where: {
+                        aproval: null
+                    }
                 }
-            }
-        ],
+            ],
     })
-    return response.json({data:counseling});
+    return response.json({ data: counseling });
+};
+
+exports.approveAppointment = async (request, response) => {
+    const id_conseling = request.params.id
+    const data = { aproval: true }
+    try {
+        const conseling = await offlineModel.update(data, { where: { id_conseling: id_conseling } })
+        return response.json({
+            message: 'success',
+            status: true,
+            data: data
+        })
+    }
+    catch(error){
+        return response.json({
+            message: 'failed',
+            status: false,
+            err: error
+        })
+    }
+};
+exports.rejectAppointment = async (request, response) => {
+    const id_conseling = request.params.id
+    const data = { aproval: false }
+    try {
+        const conseling = await offlineModel.update(data, { where: { id_conseling: id_conseling } })
+        return response.json({
+            message: 'success',
+            status: true,
+            data: data
+        })
+    }
+    catch(error){
+        return response.json({
+            message: 'failed',
+            status: false,
+            err: error
+        })
+    }
+};
+
+exports.getAllTeacher = async (request, response) => {
+    let teacher = await teacherModel.findAll({
+        attributes:[
+            'id_teacher','teacher_name'
+        ]
+    })
+
+    return response.json({
+        success: true,
+        data: teacher,
+        message: `All teacher have been loaded`,
+    })
 };
