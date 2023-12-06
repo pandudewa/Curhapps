@@ -1,1 +1,21 @@
-aaaa
+name: remote ssh command
+on: [push]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
+        key: ${{ secrets.PASS }}
+        port: 4444
+        script: |
+            cd /home/moklet
+            git pull origin master
+            git status
+            npm install
+	          pm2 reload server
