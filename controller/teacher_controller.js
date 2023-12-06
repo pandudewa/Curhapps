@@ -58,26 +58,29 @@ exports.Login = async (request, response) => {
 exports.requestAppointment= async (request, response)=>{
     const counseling = await conselingModel.findAll({
         attributes: ['id_conseling'],
-        include: {
-            attributes: ['student_name'],
-            model: studentModel,
-            required: true,
-            as : 'student'
-        },
-        include:{
-            attributes: [],
-            model: teacherModel,
-            required: true,
-            as : 'teacher'
-        },
-        include:{
-            attributes: ['meeting_date','aproval'],
-            model: offlineModel,
-            required: true,
-            where:{
-                aproval: null
+        include: 
+        [
+            {
+                attributes: ['student_name'],
+                model: studentModel,
+                required: true,
+                as : 'student'
+            },
+            {
+                attributes: [],
+                model: teacherModel,
+                required: true,
+                as : 'teacher'
+            },
+            {
+                attributes: ['meeting_date','aproval'],
+                model: offlineModel,
+                required: true,
+                where:{
+                    aproval: null
+                }
             }
-        },
+        ],
     })
     return response.json({data:counseling});
 };
