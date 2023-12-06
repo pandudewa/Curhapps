@@ -3,7 +3,8 @@ const app = express()
 app.use(express.json())
 const teacherController = require(`../controller/teacher_controller`)
 const auth = require("../auth/auth")
+const validasiTeacher = require('../middleware/validasi')
 
-app.post("/login", teacherController.Login)
+app.post("/login", validasiTeacher.validateTeacher, teacherController.Login)
 
 module.exports = app

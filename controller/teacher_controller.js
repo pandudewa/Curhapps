@@ -18,7 +18,7 @@ exports.Login = async (request, response) => {
         if (findTeacher == null) {
             return response.status(404).json({
                 message: "NIK or password doesn't match",
-                err: error
+                err: ''
             })
         }
 
@@ -31,7 +31,7 @@ exports.Login = async (request, response) => {
 
         tokenPayLoad = JSON.stringify(tokenPayLoad)
 
-        let Token = await jsonwebtoken.sign(tokenPayLoad, SECRET_KEY, {expiresIn:"1h"})
+        let Token = await jsonwebtoken.sign(tokenPayLoad, SECRET_KEY,)
 
         return response.status(200).json({
             status: true,
@@ -47,7 +47,7 @@ exports.Login = async (request, response) => {
         console.log(error)
 
         return response.status(500).json({
-            message: "Internal error",
+            message: "Internal errors",
             err: error
         });
     };
