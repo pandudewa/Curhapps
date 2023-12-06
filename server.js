@@ -10,10 +10,12 @@ app.use(bodyParser.json())
 const studentRoute = require(`./route/student_route`)
 const teacherRoute = require(`./route/teacher_route`)
 const conselingRoute = require('./route/conseling_route')
+const offlineRoute = require('./route/offline_route')
 
 app.use(`/student`, studentRoute)
 app.use(`/teacher`, teacherRoute)
 app.use('/conseling', conselingRoute)
+app.use('/offline/', offlineRoute)
 app.get('/', function(req, res){
     res.json({nama: 'lancar'})
 })
