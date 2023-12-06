@@ -1,4 +1,7 @@
 const teacherModel = require(`../models/index`).teacher
+const conselingModel = require(`../models/index`).conseling
+const studentModel = require(`../models/index`).student
+const offlineModel = require(`../models/index`).offline
 const md5 = require(`md5`)
 const Op = require(`sequelize`).Op
 const jsonwebtoken = require(`jsonwebtoken`)
@@ -51,4 +54,33 @@ exports.Login = async (request, response) => {
             err: error
         });
     };
+};
+exports.requestAppointment= async (request, response)=>{
+    const counseling = await conselingModel.findAll({
+        attributes: ['id_conseling'],
+        include: 
+        [
+            {
+                attributes: ['student_name'],
+                model: studentModel,
+                required: true,
+                as : 'student'
+            },
+            {
+                attributes: [],
+                model: teacherModel,
+                required: true,
+                as : 'teacher'
+            },
+            {
+                attributes: ['meeting_date','aproval'],
+                model: offlineModel,
+                required: true,
+                where:{
+                    aproval: null
+                }
+            }
+        ],
+    })
+    return response.json({data:counseling});
 };

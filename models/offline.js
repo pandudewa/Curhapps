@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.conseling)
+      this.belongsTo(models.conseling,{
+        foreignKey: 'id_conseling'
+      })
     }
   }
   offline.init({
@@ -20,7 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    id_conseling: DataTypes.INTEGER, unique: true,
+    id_conseling: {
+      type:DataTypes.INTEGER, 
+      unique: true,
+    },
     aproval: DataTypes.BOOLEAN,
     meeting_date: DataTypes.DATE
   }, {
