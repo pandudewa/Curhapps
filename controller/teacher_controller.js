@@ -41,7 +41,8 @@ exports.Login = async (request, response) => {
             data: {
                 token: Token,
                 nik: findTeacher.nik,
-                teacher_name: findTeacher.teacher_name
+                teacher_name: findTeacher.teacher_name,
+                id_teacher: findTeacher.id_teacher
             }
         })
     } catch (error) {
