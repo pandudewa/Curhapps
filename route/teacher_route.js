@@ -6,5 +6,6 @@ const auth = require("../auth/auth")
 const validasiTeacher = require('../middleware/validasi')
 
 app.post("/login", teacherController.Login)
+app.get("/appointment", auth.authVerify, teacherController.requestAppointment)
 
 module.exports = app
