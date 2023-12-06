@@ -37,7 +37,8 @@ exports.Login = async (request, response) => {
             data: {
                 token: Token,
                 nis: findStudent.nis,
-                student_name: findStudent.student_name
+                student_name: findStudent.student_name,
+                id_student: findStudent.id_student
             }
         })
     } catch (error) {
