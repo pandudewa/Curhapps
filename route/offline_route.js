@@ -4,6 +4,6 @@ app.use(express.json())
 let offlineController = require("../controller/offline_controller")
 const auth = require("../auth/auth")
 
-app.post("/",  offlineController.findOffline)
+app.get("/appointment",  offlineController.dataOffline)
 
 module.exports = app

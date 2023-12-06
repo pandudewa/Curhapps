@@ -15,7 +15,7 @@ const offlineRoute = require('./route/offline_route')
 app.use(`/student`, studentRoute)
 app.use(`/teacher`, teacherRoute)
 app.use('/conseling', conselingRoute)
-app.use('/offline/', offlineRoute)
+app.use('/offline', offlineRoute)
 app.get('/', function(req, res){
     res.json({nama: 'lancar'})
 })

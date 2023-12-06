@@ -39,7 +39,7 @@ exports.addConseling = async (request, response) => {
 
             let offLine = {
                 id_conseling: id,
-                aproval: false,
+                aproval: null,
                 meeting_date: d,
             };
 

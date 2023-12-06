@@ -1,31 +1,28 @@
-const { conseling, offline } = require('./models');
+const conselingModel = require(`../models/index`).conseling
+const studentModel = require(`../models/index`).student
+const offlineModel = require(`../models/index`).offline
 
 
-exports.findOffline = (response) => {
-    try {
-        const aproval = true;
-
-        const data = offline.findOne({
-            attributes: ['id_conseling', 'meeting_date', 'aproval'],
-            include: [{
-                model: conseling,
-                attributes: ['id_student', 'isclosed'],
-                where: { boolean_column: aproval }
-            }]
-
-
-        })
-        return response.json({
-            message: 'success',
-            status: true,
-            data: data
-        })
-    } catch (error) {
-        console.log(error)
-
-        return response.status(500).json({
-            message: "Internal errors",
-            err: error
-        });
-    }
-}
+exports.dataOffline = async (request, response) => {
+    const conseling = await conselingModel.findAll({
+        attributes: ['id_conseling'],
+        include:
+            [
+                {
+                    attributes: ['student_name'],
+                    model: studentModel,
+                    required: true,
+                    as: 'student'
+                },
+                {
+                    attributes: ['meeting_date', 'aproval'],
+                    model: offlineModel,
+                    required: true,
+                    where: {
+                        aproval: true
+                    }
+                }
+            ],
+    })
+    return response.json({ data: conseling });
+};
