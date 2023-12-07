@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.conseling,{
-        foreignKey:'id_conseling'
+        foreignKey:'id_conseling', as: "conseling"
       })
     }
   }
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     id_user: DataTypes.INTEGER,
     tipe_user: DataTypes.ENUM('student', 'teacher'),
     counseling: DataTypes.TEXT,
-    isclosed: DataTypes.BOOLEAN
+    // isclosed: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'online',

@@ -15,7 +15,8 @@ exports.Login = async (request, response) => {
 
         const findStudent = await studentModel.findOne({ where: params })
         if (findStudent == null) {
-            return response.status(404).json({
+            return response.status(200).json({
+                status: false,
                 message: "NIS or password doesn't match",
             })
         }
@@ -52,3 +53,16 @@ exports.Login = async (request, response) => {
     };
 };
 
+exports.getAllStudent = async (request, response) => {
+    let student = await studentModel.findAll({
+        attributes:[
+            'id_student','nis','student_name', 'photo'
+        ]
+    })
+
+    return response.json({
+        success: true,
+        data: student,
+        message: `All student have been loaded`,
+    })
+};

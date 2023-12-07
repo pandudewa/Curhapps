@@ -19,7 +19,8 @@ exports.Login = async (request, response) => {
 
         const findTeacher = await teacherModel.findOne({ where: params })
         if (findTeacher == null) {
-            return response.status(404).json({
+            return response.status(200).json({
+                status: false,
                 message: "NIK or password doesn't match",
             })
         }
@@ -126,9 +127,33 @@ exports.rejectAppointment = async (request, response) => {
 };
 
 exports.getAllTeacher = async (request, response) => {
+
+    // let online = await onlineModel.findAll({
+    //     include: [{
+    //         model: conselingModel,
+    //         as: 'conseling',
+    //         required: true,
+    //         include: [{
+    //             model: studentModel,
+    //             as: "student",
+    //             required: true,
+    //             attributes:[
+    //                 'id_student','nis','student_name', 'photo'
+    //             ],
+    //         }] 
+    //     }]
+    // })
+
+    // return response.json({
+    //     success: true,
+    //     data: online,
+    //     jumlah_data:online.length,
+    //     message: `All student have been loaded`,
+    // })
+
     let teacher = await teacherModel.findAll({
         attributes:[
-            'id_teacher','teacher_name'
+            'id_teacher','teacher_name','photo'
         ]
     })
 

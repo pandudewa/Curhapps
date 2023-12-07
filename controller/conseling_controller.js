@@ -12,7 +12,7 @@ exports.addConseling = async (request, response) => {
     let newConseling = {
         id_student: request.body.id_student,
         id_teacher: request.body.id_teacher,
-        category: request.body.category,
+        category: 'offline',
         isclosed: false,
     }
 

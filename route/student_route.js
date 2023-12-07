@@ -6,5 +6,6 @@ const auth = require("../auth/auth")
 const validasiStudent = require('../middleware/validasi')
 
 app.post("/login", validasiStudent.validateStudent, studentController.Login)
+app.get("/getstudent", auth.authVerify, studentController.getAllStudent)
 
 module.exports = app
