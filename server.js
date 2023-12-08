@@ -20,7 +20,7 @@ app.use('/conseling', conselingRoute)
 app.use('/offline', offlineRoute)
 app.use('/online', onlineRoute)
 app.get('/', function(req, res){
-    res.json({nama: 'lancar'})
+    res.json({nama: 'lancarsss'})
 })
 app.use(express.static(__dirname))
 
