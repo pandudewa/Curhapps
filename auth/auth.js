@@ -38,4 +38,19 @@ const authVerify = async (req, res, next) => {
     }
 };
 
-module.exports = { authVerify };
+const getUserLogin = (token)=>{
+    if (token.headers && token.headers.authorization) {
+        let secret = "secretcode"
+        var authorization = token.headers.authorization.split(' ')[1],
+            decoded;
+        try {
+            decoded = jwt.verify(authorization, secret);
+        } catch (e) {
+            return res.status(401).send('unauthorized');
+        }
+        let user = decoded;
+        return user
+    }
+}
+
+module.exports = { authVerify, getUserLogin };

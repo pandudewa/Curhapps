@@ -6,6 +6,7 @@ const md5 = require(`md5`)
 const Op = require(`sequelize`).Op
 const jsonwebtoken = require(`jsonwebtoken`)
 const SECRET_KEY = "secretcode"
+ 
 
 
 exports.Login = async (request, response) => {

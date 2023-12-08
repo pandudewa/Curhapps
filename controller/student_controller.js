@@ -4,6 +4,7 @@ const Op = require(`sequelize`).Op
 const jsonwebtoken = require(`jsonwebtoken`)
 const SECRET_KEY = "secretcode"
 
+
 exports.Login = async (request, response) => {
     try {
         const params = {
