@@ -44,7 +44,7 @@ const getUserLogin = (token)=>{
         var authorization = token.headers.authorization.split(' ')[1],
             decoded;
         try {
-            decoded = jwt.verify(authorization, secret);
+            decoded = jsonwebtoken.verify(authorization, secret);
         } catch (e) {
             return {"message": "gagal load token","status": false};
         }

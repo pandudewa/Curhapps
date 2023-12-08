@@ -29,9 +29,13 @@ exports.Login = async (request, response) => {
         console.log(findTeacher)
 
         let tokenPayLoad = {
-            nik: findTeacher.nik,
+            id: findTeacher.nik,
+            id_user: findTeacher.id_teacher,
             password: findTeacher.password,
-            photo: findTeacher.photo
+            photo: findTeacher.photo,
+            address: findTeacher.address,
+            phone: findTeacher.phone,
+            class: null
         }
 
         tokenPayLoad = JSON.stringify(tokenPayLoad)

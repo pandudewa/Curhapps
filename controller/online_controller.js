@@ -171,7 +171,8 @@ exports.getChatGuru = async (request, response) => {
 };
 
 exports.insertChatSiswa = async (request, response) => {
-    user = getUserLogin(request) 
+    user = getUserLogin(request)
+
     let Chat = {
         id_conseling: request.params.id,
         id_user: user.id_student,
@@ -184,7 +185,8 @@ exports.insertChatSiswa = async (request, response) => {
         .then(async (result) => {
             return response.json({
                 message: "success",
-                status: true            
+                status: true,
+                data: result            
             })
         })
         .catch(error => {
@@ -208,7 +210,8 @@ exports.insertChatGuru = async (request, response) => {
         .then(async (result) => {
             return response.json({
                 message: "success",
-                status: true            
+                status: true,
+                data: result            
             })
         })
         .catch(error => {
