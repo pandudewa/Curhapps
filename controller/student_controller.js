@@ -25,7 +25,8 @@ exports.Login = async (request, response) => {
 
         let tokenPayLoad = {
             nis: findStudent.nis,
-            password: findStudent.password
+            password: findStudent.password,
+            photo: findStudent.photo
         }
 
         tokenPayLoad = JSON.stringify(tokenPayLoad)
@@ -39,7 +40,8 @@ exports.Login = async (request, response) => {
                 token: Token,
                 nis: findStudent.nis,
                 student_name: findStudent.student_name,
-                id_student: findStudent.id_student
+                id_student: findStudent.id_student,
+                photo: findStudent.photo
             }
         })
     } catch (error) {
