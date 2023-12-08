@@ -3,7 +3,7 @@
     "username": "bk",
     "password": "magangjesicabk",
     "database": "curhapss",
-    "host": "127.0.0.1",
+    "host": "103.93.130.122",
     "dialect": "mysql"
   },
   "test": {
@@ -21,4 +21,3 @@
     "dialect": "mysql"
   }
 }
-   
