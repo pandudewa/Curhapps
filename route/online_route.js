@@ -9,6 +9,7 @@ app.post("/addteacher", auth.authVerify, onlineController.addOnlineTeacher)
 app.get("/getonline/:id", auth.authVerify, onlineController.getAllOnline)
 app.get("/getchatguru", auth.authVerify, onlineController.getChatGuru)
 app.get("/getchatsiswa", auth.authVerify, onlineController.getChatSiswa)
-app.post("/insertchat/:id", auth.authVerify, onlineController.insertChatSiswa)
+app.post("/insertchatsiswa/:id", auth.authVerify, onlineController.insertChatSiswa)
+app.post("/insertchatguru/:id", auth.authVerify, onlineController.insertChatGuru)
 
 module.exports = app

@@ -193,3 +193,27 @@ exports.insertChatSiswa = async (request, response) => {
             })
         })
 }
+
+exports.insertChatGuru = async (request, response) => {
+    user = getUserLogin(request) 
+    let Chat = {
+        id_conseling: request.params.id,
+        id_user: user.id_teacher,
+        tipe_user: "teacher",
+        counseling: request.body.Chat
+    }
+
+
+    onlineModel.create(Chat)
+        .then(async (result) => {
+            return response.json({
+                message: "success",
+                status: true            
+            })
+        })
+        .catch(error => {
+            return response.json({
+                message: error.message
+            })
+        })
+}
