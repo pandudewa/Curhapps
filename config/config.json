@@ -16,7 +16,7 @@
   "production": {
     "username": "bk",
     "password": "magangjesicabk",
-    "database": "curhapps",
+    "database": "curhapss",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
