@@ -3,7 +3,7 @@ const onlineModel = require(`../models/index`).online
 const studentModel = require(`../models/index`).student
 const teacherModel = require(`../models/index`).teacher
 const Op = require(`sequelize`).Op
-const {sequelize} = require('../config/connect_db')
+const sequelize = require('../config/connect_db').sequelize
 
 // const Sequelize = require("sequelize");
 // const sequelize = new Sequelize("curhapss", "bk", "magangjesicabk", {
