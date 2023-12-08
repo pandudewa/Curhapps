@@ -46,7 +46,7 @@ const getUserLogin = (token)=>{
         try {
             decoded = jwt.verify(authorization, secret);
         } catch (e) {
-            return res.status(401).send('unauthorized');
+            return {"message": "gagal load token","status": false};
         }
         let user = decoded;
         return user
