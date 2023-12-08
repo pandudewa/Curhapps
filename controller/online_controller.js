@@ -3,7 +3,13 @@ const onlineModel = require(`../models/index`).online
 const studentModel = require(`../models/index`).student
 const teacherModel = require(`../models/index`).teacher
 const Op = require(`sequelize`).Op
-const sequelize = require('../config/connect_db')
+// const sequelize = require('../config/connect_db')
+
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize("curhapss", "bk", "magangjesicabk", {
+    host: "127.0.0.1",
+    dialect: "mysql",
+})
 
 exports.addOnlineStudent = async (request, response) => {
     let newConseling = {
