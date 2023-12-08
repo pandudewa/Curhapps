@@ -175,7 +175,7 @@ exports.insertChatSiswa = async (request, response) => {
 
     let Chat = {
         id_conseling: request.params.id,
-        id_user: user.id_student,
+        id_user: user.id_user,
         tipe_user: "student",
         counseling: request.body.Chat
     }
@@ -200,7 +200,7 @@ exports.insertChatGuru = async (request, response) => {
     user = getUserLogin(request) 
     let Chat = {
         id_conseling: request.params.id,
-        id_user: user.id_teacher,
+        id_user: user.id_user,
         tipe_user: "teacher",
         counseling: request.body.Chat
     }
