@@ -18,4 +18,6 @@ jobs:
           git pull origin master
           git status
           npm install
-          pm2 reload server
+          npm run build
+          pm2 reload curhapps
+          pm2 restart curhapps
