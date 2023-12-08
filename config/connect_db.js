@@ -4,4 +4,4 @@ const sequelize = new Sequelize("curhapss", "bk", "magangjesicabk", {
     dialect: "mysql",
 })
 
-exports = sequelize
+exports = {sequelize}
