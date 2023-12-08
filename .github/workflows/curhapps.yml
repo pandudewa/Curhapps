@@ -14,8 +14,10 @@ jobs:
         key: ${{ secrets.PASS }}
         port: 4444
         script:	|
-          cd /home/magangjesicabk
+          cd /home/magangjesicabk/magangjesicabk
           git pull origin master
           git status
           npm install
+          npm run build
           pm2 reload server
+          pm2 restart server
