@@ -19,5 +19,5 @@ jobs:
           git status
           npm install
           npm run build
-          pm2 reload curhapps
-          pm2 restart curhapps
+          pm2 reload server
+          pm2 restart server
