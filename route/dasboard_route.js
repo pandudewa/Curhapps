@@ -6,5 +6,7 @@ const auth = require("../auth/auth")
 
 app.get("/upcoming", auth.authVerify, dashboardController.upcomingAppointment)
 app.get("/last", auth.authVerify, dashboardController.lastCounseling)
+app.get("/upcomingonline", auth.authVerify, dashboardController.upcomingOnline)
+app.get("/lastonline", auth.authVerify, dashboardController.lastCounselingOnline)
 
 module.exports = app

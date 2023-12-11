@@ -71,6 +71,72 @@ exports.lastCounseling = async (request, response) => {
         data: conseling
     });
 };
+
+exports.upcomingOnline = async (request, response) => {
+    const conseling = await conselingModel.findOne({
+        attributes: ['id_conseling'],
+        order: [[ 'id_conseling', 'DESC' ]],
+        isclosed: false,
+        include:
+            [
+                {
+                    attributes: ['teacher_name'],
+                    model: teacherModel,
+                    required: true,
+                    as: 'teacher'
+                },
+                {
+                    attributes: [['createdAt','meeting_date']],
+                    model: onlineModel,
+                    required: true,
+                    as: 'online'
+                }
+            ],
+    })
+    return response.json({
+        message: 'success',
+        status: true,
+        data: conseling
+    });
+
+};
+
+exports.lastCounselingOnline = async (request, response) => {
+    const conseling = await conselingModel.findOne({
+        attributes: ['id_conseling'],
+        isclosed: false,
+        order: [[ 'id_conseling', 'DESC' ]],
+        include:
+            [
+                {
+                    attributes: ['teacher_name'],
+                    model: teacherModel,
+                    required: true,
+                    as: 'teacher'
+                },
+                {
+                    attributes: [['createdAt','meeting_date']],
+                    model: onlineModel,
+                    required: true,
+                    // where: {
+                    //     aproval: true
+                    // }
+                    as: "online"
+                },
+                {
+                    attributes: ['rating'],
+                    model: counselingResultModel,
+                    required: true,
+                    as: 'counseling_result'
+                }
+            ],
+    })
+    return response.json({
+        message: 'success',
+        status: true,
+        data: conseling
+    });
+};
  
 // exports.upcomingOnline = async (request, response) => {
 //     const conseling = await conselingModel.findOne({

@@ -16,6 +16,18 @@ exports.addConseling = async (request, response) => {
         isclosed: false,
     }
 
+    const conseling = await conselingModel.findAll({
+        where: {id_teacher: request.body.id_teacher },
+        where: {isclosed: false },
+    })
+
+    if(conseling){
+        return response.json({
+            status: false,
+            message: 'anda belum bisa konseling dengan guru bk ini karena masih ada konseling yang belum terselesaikan',
+        })
+    }
+
     // await teacherModel.update({ status: false }, { where: { id_teacher: request.body.id_teacher } })
 
     conselingModel.create(newConseling)

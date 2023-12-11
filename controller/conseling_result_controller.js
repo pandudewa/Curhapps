@@ -35,16 +35,38 @@ exports.addConselingResultTeacher = async (request, response) => {
     })
 }
 
-exports.getAllConselingResult = async (request, response) => {
-    let counseling_result = await counselingResultModel.findAll({
-        // attributes:[
-        //     'id_student','nis','student_name', 'photo'
-        // ]
-    })
+exports.getAllResult = async (request, response) => {
+    try {
+        let id_conseling = request.params.id
 
-    return response.json({
-        success: true,
-        data: counseling_result,
-        message: `All result have been loaded`,
-    })
+        let counselingResult = await counselingResultModel.findAll({
+            where: {
+                id_conseling: id_conseling,
+            },
+        })
+        return response.json({
+            success: true,
+            data: counselingResult,
+            message: `All result have been loaded`,
+        });
+    } catch (error) {
+        console.error('Error in getAllResult:', error);
+        return response.status(500).json({
+            success: false,
+            data: null,
+            message: 'Internal Server Error',
+        });
+    }
+    
+    // let counselingResult = await counselingResultModel.findAll({
+    //     // attributes:[
+    //     //     'id_student','nis','student_name', 'photo'
+    //     // ]
+    // })
+
+    // return response.json({
+    //     success: true,
+    //     data: counselingResult,
+    //     message: `All result have been loaded`,
+    // })
 };

@@ -15,13 +15,26 @@ const { getUserLogin } = require('../auth/auth')
 // })
 
 exports.addOnlineStudent = async (request, response) => {
+    user = getUserLogin(request)
+   
     let newConseling = {
-        id_student: request.body.id_student,
+        id_student: user.id_user,
         id_teacher: request.body.id_teacher,
         category: 'online',
         isclosed: false,
     }
 
+    const conseling = await conselingModel.findAll({
+        where: {id_teacher: request.body.id_teacher },
+        where: {isclosed: false },
+    })
+
+    if(conseling){
+        return response.json({
+            status: false,
+            message: 'anda belum bisa konseling dengan guru bk ini karena masih ada konseling yang belum terselesaikan',
+        })
+    }
 
     conselingModel.create(newConseling)
         .then(async (result) => {
@@ -37,7 +50,7 @@ exports.addOnlineStudent = async (request, response) => {
             let onLine = {
                 id_conseling: id,
                 id_user: idStudent,
-                tipe_user: request.body.tipe_user,
+                tipe_user: 'student',
                 counseling: request.body.counseling
             };
 
@@ -56,8 +69,10 @@ exports.addOnlineStudent = async (request, response) => {
 }
 
 exports.addOnlineTeacher = async (request, response) => {
+    user = getUserLogin(request)
+
     let newConseling = {
-        id_student: request.body.id_student,
+        id_student: user.id_user,
         id_teacher: request.body.id_teacher,
         category: 'online',
         isclosed: false,
@@ -78,7 +93,7 @@ exports.addOnlineTeacher = async (request, response) => {
             let onLine = {
                 id_conseling: id,
                 id_user: idTeacher,
-                tipe_user: request.body.tipe_user,
+                tipe_user: 'teacher',
                 counseling: request.body.counseling
             };
 
