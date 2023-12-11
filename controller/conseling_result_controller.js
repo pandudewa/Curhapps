@@ -19,7 +19,7 @@ exports.addConselingResultTeacher = async (request, response) => {
     .then(async (result) => {
 
         await conselingModel.update({ isclosed: true }, {
-            where: { id: result.id_conseling }
+            where: { id_conseling: result.id_conseling }
         });
 
         return response.json({
