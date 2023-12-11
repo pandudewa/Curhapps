@@ -74,7 +74,7 @@ exports.lastCounseling = async (request, response) => {
 
 exports.upcomingOnline = async (request, response) => {
     const conseling = await conselingModel.findOne({
-        attributes: ['id_conseling'],
+        attributes: ['id_conseling',['createdAt','meeting_date']],
         order: [[ 'id_conseling', 'DESC' ]],
         isclosed: false,
         include:
@@ -85,12 +85,12 @@ exports.upcomingOnline = async (request, response) => {
                     required: true,
                     as: 'teacher'
                 },
-                {
-                    attributes: [['createdAt','meeting_date']],
-                    model: onlineModel,
-                    required: true,
-                    as: 'online'
-                }
+                // {
+                //     attributes: [['createdAt','meeting_date']],
+                //     model: onlineModel,
+                //     required: true,
+                //     as: 'online'
+                // }
             ],
     })
     return response.json({
@@ -103,9 +103,9 @@ exports.upcomingOnline = async (request, response) => {
 
 exports.lastCounselingOnline = async (request, response) => {
     const conseling = await conselingModel.findOne({
-        attributes: ['id_conseling'],
-        isclosed: false,
+        attributes: ['id_conseling',['createdAt','meeting_date']],
         order: [[ 'id_conseling', 'DESC' ]],
+        isclosed: false,
         include:
             [
                 {
@@ -113,15 +113,6 @@ exports.lastCounselingOnline = async (request, response) => {
                     model: teacherModel,
                     required: true,
                     as: 'teacher'
-                },
-                {
-                    attributes: [['createdAt','meeting_date']],
-                    model: onlineModel,
-                    required: true,
-                    // where: {
-                    //     aproval: true
-                    // }
-                    as: "online"
                 },
                 {
                     attributes: ['rating'],
