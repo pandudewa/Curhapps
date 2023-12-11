@@ -6,7 +6,7 @@ const studentModel = require(`../models/index`).student
 const teacherModel = require(`../models/index`).teacher
 const Op = require(`sequelize`).Op
 const sequelize = require('../config/connect_db').sequelize
-const {getUserLogin} = require('../auth/auth')
+const { getUserLogin } = require('../auth/auth')
 
 // const Sequelize = require("sequelize");
 // const sequelize = new Sequelize("curhapss", "bk", "magangjesicabk", {
@@ -180,24 +180,27 @@ exports.insertChatSiswa = async (request, response) => {
         counseling: request.body.Chat
     }
 
+    const where = await conselingModel.findOne({ isclosed: false });
 
-    onlineModel.create(Chat)
+    if (where) {
+        onlineModel.create(Chat)
         .then(async (result) => {
             return response.json({
-                message: "success",
-                status: true,
-                data: result            
+            message: "success",
+            status: true,
+            data: result
             })
         })
         .catch(error => {
             return response.json({
-                message: error.message
+            message: error.message
             })
         })
+    }
 }
 
 exports.insertChatGuru = async (request, response) => {
-    user = getUserLogin(request) 
+    user = getUserLogin(request)
     let Chat = {
         id_conseling: request.params.id,
         id_user: user.id_user,
@@ -205,18 +208,21 @@ exports.insertChatGuru = async (request, response) => {
         counseling: request.body.Chat
     }
 
+    const where = await conselingModel.findOne({ isclosed: false });
 
-    onlineModel.create(Chat)
+    if (where) {
+        onlineModel.create(Chat)
         .then(async (result) => {
             return response.json({
-                message: "success",
-                status: true,
-                data: result            
+            message: "success",
+            status: true,
+            data: result
             })
         })
         .catch(error => {
             return response.json({
-                message: error.message
+            message: error.message
             })
         })
+    }
 }
