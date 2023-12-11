@@ -4,6 +4,6 @@ app.use(express.json())
 let counselingResultController = require("../controller/conseling_result_controller")
 const auth = require("../auth/auth")
 
-app.post("/insertresult", auth.authVerify, counselingResultController.addConselingResultTeacher)
+app.post("/insertresult/:id", auth.authVerify, counselingResultController.addConselingResultTeacher)
 
 module.exports = app
