@@ -34,3 +34,17 @@ exports.addConselingResultTeacher = async (request, response) => {
         })
     })
 }
+
+exports.getAllConselingResult = async (request, response) => {
+    let counseling_result = await counselingResultModel.findAll({
+        // attributes:[
+        //     'id_student','nis','student_name', 'photo'
+        // ]
+    })
+
+    return response.json({
+        success: true,
+        data: counseling_result,
+        message: `All result have been loaded`,
+    })
+};

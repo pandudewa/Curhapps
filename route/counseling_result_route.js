@@ -5,5 +5,6 @@ let counselingResultController = require("../controller/conseling_result_control
 const auth = require("../auth/auth")
 
 app.post("/insertresult/:id", auth.authVerify, counselingResultController.addConselingResultTeacher)
+app.get('./getresult', counselingResultController.getAllConselingResult)
 
 module.exports = app
