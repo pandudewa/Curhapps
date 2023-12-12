@@ -379,7 +379,7 @@ exports.countOffline = async (request, response) => {
         })
         return response.json({
             success: true,
-            data: countOffline,
+            data_count: countOffline.length,
             message: `All offline have been loaded`,
         });
     } catch (error) {
@@ -395,7 +395,7 @@ exports.countOffline = async (request, response) => {
 exports.countOnline = async (request, response) => {
 
     try {
-        let countOffline = await conselingModel.findAll({
+        let countOnline = await conselingModel.findAll({
             where: {
                 category: 'online',
                 isclosed: true,
@@ -403,7 +403,7 @@ exports.countOnline = async (request, response) => {
         })
         return response.json({
             success: true,
-            data: countOffline,
+            data_count: countOnline.length,
             message: `All online have been loaded`,
         });
     } catch (error) {
