@@ -188,7 +188,14 @@ exports.getChatGuru = async (request, response) => {
 };
 
 exports.insertChatSiswa = async (request, response) => {
-    user = getUserLogin(request)
+    const user = getUserLogin(request)
+
+    if (!request.body.Chat) {
+        return response.json({
+            message: "Invalid data. 'Chat' is required.",
+            status: false
+        });
+    }
 
     let Chat = {
         id_conseling: request.params.id,
@@ -210,14 +217,28 @@ exports.insertChatSiswa = async (request, response) => {
         })
         .catch(error => {
             return response.json({
-            message: error.message
+            message: error.message,
+            status: false
             })
         })
+    } else {
+        return response.json({
+            message: "No open counseling found.",
+            status: false
+        });
     }
 }
 
 exports.insertChatGuru = async (request, response) => {
-    user = getUserLogin(request)
+    const user = getUserLogin(request)
+    
+    if (!request.body.Chat) {
+        return response.json({
+            message: "Invalid data. 'Chat' is required.",
+            status: false
+        });
+    }
+
     let Chat = {
         id_conseling: request.params.id,
         id_user: user.id_user,
@@ -241,5 +262,10 @@ exports.insertChatGuru = async (request, response) => {
             message: error.message
             })
         })
+    } else {
+        return response.json({
+            message: "No open counseling found.",
+            status: false
+        });
     }
 }
