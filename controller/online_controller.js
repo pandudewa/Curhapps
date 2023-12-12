@@ -16,7 +16,7 @@ const { getUserLogin } = require('../auth/auth')
 
 exports.addOnlineStudent = async (request, response) => {
     user = getUserLogin(request)
-   
+
     let newConseling = {
         id_student: user.id_user,
         id_teacher: request.body.id_teacher,
@@ -25,11 +25,11 @@ exports.addOnlineStudent = async (request, response) => {
     }
 
     const conseling = await conselingModel.findAll({
-        where: {id_teacher: request.body.id_teacher },
-        where: {isclosed: false },
+        where: { id_teacher: request.body.id_teacher },
+        where: { isclosed: false },
     })
 
-    if(conseling.length > 0){
+    if (conseling.length > 0) {
         return response.json({
             status: false,
             message: 'anda belum bisa konseling dengan guru bk ini karena masih ada konseling yang belum terselesaikan',
@@ -149,10 +149,10 @@ exports.getAllOnline = async (request, response) => {
 
 exports.getChatSiswa = async (request, response) => {
     try {
-        
+
         user = getUserLogin(request)
 
-        let online = await sequelize.query('SELECT c.id_conseling, sp.*, (select count(*) from online o where o.id_user=c.id_teacher and o.tipe_user="teacher" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM student sp join conseling c on c.id_student = sp.id_student join online  op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_student = '+user.id_user+' group by c.id_conseling')
+        let online = await sequelize.query('SELECT c.id_conseling, sp.*, (select count(*) from online o where o.id_user=c.id_teacher and o.tipe_user="teacher" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM student sp join conseling c on c.id_student = sp.id_student join online  op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_student = ' + user.id_user + ' group by c.id_conseling')
         return response.json({
             message: 'success',
             status: true,
@@ -172,7 +172,7 @@ exports.getChatSiswa = async (request, response) => {
 exports.getChatGuru = async (request, response) => {
     try {
 
-        let online = await sequelize.query('SELECT c.id_conseling, sp.*, (select count(*) from online o where o.id_user=c.id_student and o.tipe_user="student" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM teacher sp join conseling c on c.id_teacher = sp.id_teacher join online op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_teacher = '+user.id_user+' group by c.id_conseling')
+        let online = await sequelize.query('SELECT c.id_conseling, sp.*, (select count(*) from online o where o.id_user=c.id_student and o.tipe_user="student" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM teacher sp join conseling c on c.id_teacher = sp.id_teacher join online op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_teacher = ' + user.id_user + ' group by c.id_conseling')
         return response.json({
             message: 'success',
             status: true,
@@ -206,23 +206,30 @@ exports.insertChatSiswa = async (request, response) => {
         counseling: request.body.Chat
     }
 
-    const where = await conselingModel.findOne({ isclosed: false });
+    const where = await conselingModel.findOne(
+        {
+            where: [
+                { isclosed: false },
+                { id_conseling: request.params.id }
+            ]
+        },
+    );
 
     if (where) {
         onlineModel.create(Chat)
-        .then(async (result) => {
-            return response.json({
-            message: "success",
-            status: true,
-            data: result
+            .then(async (result) => {
+                return response.json({
+                    message: "success",
+                    status: true,
+                    data: result
+                })
             })
-        })
-        .catch(error => {
-            return response.json({
-            message: error.message,
-            status: false
+            .catch(error => {
+                return response.json({
+                    message: error.message,
+                    status: false
+                })
             })
-        })
     } else {
         return response.json({
             message: "No open counseling found.",
@@ -233,7 +240,7 @@ exports.insertChatSiswa = async (request, response) => {
 
 exports.insertChatGuru = async (request, response) => {
     const user = getUserLogin(request)
-    
+
     if (!request.body.Chat) {
         return response.json({
             message: "Invalid data. 'Chat' is required.",
@@ -248,22 +255,29 @@ exports.insertChatGuru = async (request, response) => {
         counseling: request.body.Chat
     }
 
-    const where = await conselingModel.findOne({ isclosed: false });
+    const where = await conselingModel.findOne(
+        {
+            where: [
+                { isclosed: false },
+                { id_conseling: request.params.id }
+            ]
+        },
+    );
 
     if (where) {
         onlineModel.create(Chat)
-        .then(async (result) => {
-            return response.json({
-            message: "success",
-            status: true,
-            data: result
+            .then(async (result) => {
+                return response.json({
+                    message: "success",
+                    status: true,
+                    data: result
+                })
             })
-        })
-        .catch(error => {
-            return response.json({
-            message: error.message
+            .catch(error => {
+                return response.json({
+                    message: error.message
+                })
             })
-        })
     } else {
         return response.json({
             message: "No open counseling found.",
