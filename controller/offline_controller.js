@@ -6,6 +6,7 @@ const offlineModel = require(`../models/index`).offline
 exports.dataOffline = async (request, response) => {
     const conseling = await conselingModel.findAll({
         attributes: ['id_conseling'],
+        where: { isclosed: false },
         include:
             [
                 {
