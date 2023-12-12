@@ -370,4 +370,48 @@ exports.lastCounselingOnline = async (request, response) => {
 
 exports.countOffline = async (request, response) => {
 
+    try {
+        let countOffline = await conselingModel.findAll({
+            where: {
+                category: 'offline',
+                isclosed: true,
+            },
+        })
+        return response.json({
+            success: true,
+            data: countOffline,
+            message: `All offline have been loaded`,
+        });
+    } catch (error) {
+        console.error('Error in getAllResult:', error);
+        return response.status(500).json({
+            success: false,
+            data: null,
+            message: 'Internal Server Error',
+        });
+    }
+}
+
+exports.countOnline = async (request, response) => {
+
+    try {
+        let countOffline = await conselingModel.findAll({
+            where: {
+                category: 'online',
+                isclosed: true,
+            },
+        })
+        return response.json({
+            success: true,
+            data: countOffline,
+            message: `All online have been loaded`,
+        });
+    } catch (error) {
+        console.error('Error in getAllResult:', error);
+        return response.status(500).json({
+            success: false,
+            data: null,
+            message: 'Internal Server Error',
+        });
+    }
 }
