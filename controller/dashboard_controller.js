@@ -374,7 +374,7 @@ exports.countOffline = async (request, response) => {
         let countOffline = await conselingModel.findAll({
             where: {
                 category: 'offline',
-                isclosed: false,
+                isclosed: true,
             },
         })
         return response.json({
@@ -398,7 +398,7 @@ exports.countOnline = async (request, response) => {
         let countOnline = await conselingModel.findAll({
             where: {
                 category: 'online',
-                isclosed: false,
+                isclosed: true,
             },
         })
         return response.json({
