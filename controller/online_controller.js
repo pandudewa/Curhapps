@@ -29,7 +29,7 @@ exports.addOnlineStudent = async (request, response) => {
         where: {isclosed: false },
     })
 
-    if(conseling){
+    if(conseling.length > 0){
         return response.json({
             status: false,
             message: 'anda belum bisa konseling dengan guru bk ini karena masih ada konseling yang belum terselesaikan',
@@ -56,13 +56,14 @@ exports.addOnlineStudent = async (request, response) => {
 
             onlineModel.create(onLine)
                 .then(async (result) => {
-                    return response.json({ data: result })
+                    return response.json({ status: true, data: result })
                 })
 
 
         })
         .catch(error => {
             return response.json({
+                status: false,
                 message: error.message
             })
         })
@@ -99,13 +100,14 @@ exports.addOnlineTeacher = async (request, response) => {
 
             onlineModel.create(onLine)
                 .then(async (result) => {
-                    return response.json({ data: result })
+                    return response.json({ status: true, data: result })
                 })
 
 
         })
         .catch(error => {
             return response.json({
+                status: false,
                 message: error.message
             })
         })

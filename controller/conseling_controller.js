@@ -2,6 +2,7 @@ const offlineModel = require(`../models/index`).offline
 const conselingModel = require(`../models/index`).conseling
 const teacherModel = require(`../models/index`).teacher
 const Op = require(`sequelize`).Op
+const { getUserLogin } = require('../auth/auth')
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize("curhapps", "root", "", {
     host: "localhost",
@@ -9,8 +10,10 @@ const sequelize = new Sequelize("curhapps", "root", "", {
 })
 
 exports.addConseling = async (request, response) => {
+    user = getUserLogin(request)
+
     let newConseling = {
-        id_student: request.body.id_student,
+        id_student: user.id_user,
         id_teacher: request.body.id_teacher,
         category: 'offline',
         isclosed: false,
@@ -20,8 +23,9 @@ exports.addConseling = async (request, response) => {
         where: {id_teacher: request.body.id_teacher },
         where: {isclosed: false },
     })
-
-    if(conseling){
+    // return response.json({
+    //     status: conseling,});
+    if(conseling.length > 0){
         return response.json({
             status: false,
             message: 'anda belum bisa konseling dengan guru bk ini karena masih ada konseling yang belum terselesaikan',
@@ -57,7 +61,7 @@ exports.addConseling = async (request, response) => {
 
             offlineModel.create(offLine)
                 .then(async (result) => {
-                    return response.json({ data: result })
+                    return response.json({ status: true ,data: result })
                 })
 
             // for (let i = 0; i < offline.length; i++) {
@@ -79,6 +83,7 @@ exports.addConseling = async (request, response) => {
         })
         .catch(error => {
             return response.json({
+                status: false,
                 message: error.message
             })
         })
