@@ -3,6 +3,7 @@ const teacherModel = require(`../models/index`).teacher
 const offlineModel = require(`../models/index`).offline
 const counselingResultModel = require('../models/index').counseling_result
 const onlineModel = require('../models/index').online
+const { getUserLogin } = require('../auth/auth')
 
 exports.upcomingAppointment = async (request, response) => {
     user = getUserLogin(request)
