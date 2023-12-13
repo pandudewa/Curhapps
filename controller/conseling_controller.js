@@ -21,6 +21,7 @@ exports.addConseling = async (request, response) => {
 
     const conseling = await conselingModel.findAll({
         where: {id_teacher: request.body.id_teacher },
+        where: {id_student: user.id_user },
         where: {isclosed: false },
     })
     // return response.json({
