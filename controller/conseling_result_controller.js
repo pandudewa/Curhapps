@@ -206,7 +206,7 @@ exports.getRating = async (request, response) => {
 };
 
 exports.conselingResult = async (request, response) => {
-    let id_teacher = request.params.id_teacher
+    const user = getUserLogin(request)
 
     const conseling = await counselingResultModel.findAll({
         
@@ -219,8 +219,19 @@ exports.conselingResult = async (request, response) => {
                     required: true,
                     where: {
                         isclosed: true,
-                        id_teacher: id_teacher
+                        id_teacher: user.id_user
                     },
+                    include:[
+                        {
+                            model: studentModel,
+                            attributes: ['id_student', 'student_name'],
+                            as: 'student'
+                        },{
+                            model: teacherModel,
+                            attributes: ['id_teacher','teacher_name'],
+                            as: 'teacher'
+                        }
+                    ],
                     as: 'conseling'
                 },
             ],
