@@ -115,13 +115,14 @@ exports.approveAppointment = async (request, response) => {
 };
 exports.rejectAppointment = async (request, response) => {
     const id_conseling = request.params.id
-    const data = { aproval: false }
+    const data = { aproval: false};
+    const isclosed = { isclosed: true };
     try {
         const conseling = await offlineModel.update(data, { where: { id_conseling: id_conseling } })
+        const setClosed = await conselingModel.update(isclosed, { where: { id_conseling: id_conseling } })
         return response.json({
             message: 'success',
             status: true,
-            data: data
         })
     }
     catch(error){
