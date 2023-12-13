@@ -20,9 +20,11 @@ exports.addConseling = async (request, response) => {
     }
 
     const conseling = await conselingModel.findAll({
-        where: {id_teacher: request.body.id_teacher },
-        where: {id_student: user.id_user },
-        where: {isclosed: false },
+        where: [
+            {id_teacher: request.body.id_teacher },
+            {id_student: user.id_user },
+            {isclosed: false },
+        ]
     })
     return response.json({
         status: conseling,});
