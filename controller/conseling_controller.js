@@ -26,8 +26,8 @@ exports.addConseling = async (request, response) => {
             {isclosed: false },
         ]
     })
-    return response.json({
-        status: conseling,});
+    // return response.json({
+    //     status: conseling,});
     if(conseling.length > 0){
         return response.json({
             status: false,
