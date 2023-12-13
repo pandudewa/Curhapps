@@ -116,7 +116,18 @@ exports.addRating = async (request, response) => {
         rating: request.body.rating,
     }
 
-
+    const cekrating = await counselingResultModel.findOne({
+        where:{
+            id_conseling:id_conseling,
+            rating: null
+        }
+    })
+    if(!cekrating){
+        return response.json({
+            message: 'consuling ini sudah diberi rating',
+            status: false
+        })
+    }
     counselingResultModel.update(result , {
         where: { id_conseling: id_conseling }
     })
