@@ -24,8 +24,8 @@ exports.addConseling = async (request, response) => {
         where: {id_student: user.id_user },
         where: {isclosed: false },
     })
-    // return response.json({
-    //     status: conseling,});
+    return response.json({
+        status: conseling,});
     if(conseling.length > 0){
         return response.json({
             status: false,
