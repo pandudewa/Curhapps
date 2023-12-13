@@ -152,7 +152,7 @@ exports.getChatSiswa = async (request, response) => {
 
         user = getUserLogin(request)
 
-        let online = await sequelize.query('SELECT c.id_conseling, sp.*, (select count(*) from online o where o.id_user=c.id_teacher and o.tipe_user="teacher" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM student sp join conseling c on c.id_student = sp.id_student join online  op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_student = ' + user.id_user + ' group by c.id_conseling')
+        let online = await sequelize.query('SELECT c.id_conseling, sp.*, th.id_teacher, th.teacher_name, th.nik, (select count(*) from online o where o.id_user=c.id_teacher and o.tipe_user="teacher" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM student sp join conseling c on c.id_student = sp.id_student join teacher th on th.id_teacher = c.id_teacher join online  op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_student = ' + user.id_user + ' group by c.id_conseling')
         return response.json({
             message: 'success',
             status: true,
@@ -172,7 +172,7 @@ exports.getChatSiswa = async (request, response) => {
 exports.getChatGuru = async (request, response) => {
     try {
 
-        let online = await sequelize.query('SELECT c.id_conseling, sp.*, (select count(*) from online o where o.id_user=c.id_student and o.tipe_user="student" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM teacher sp join conseling c on c.id_teacher = sp.id_teacher join online op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_teacher = ' + user.id_user + ' group by c.id_conseling')
+        let online = await sequelize.query('SELECT c.id_conseling, sp.*, st.id_student, st.nis, st.student_name, st.photo, st.phone, st.class ,(select count(*) from online o where o.id_user=c.id_student and o.tipe_user="student" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM teacher sp join conseling c on c.id_teacher = sp.id_teacher join student st on st.id_student = c.id_student join online op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_teacher = ' + user.id_user + ' group by c.id_conseling')
         return response.json({
             message: 'success',
             status: true,
