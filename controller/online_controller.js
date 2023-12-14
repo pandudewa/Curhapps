@@ -4,8 +4,10 @@ const conselingModel = require(`../models/index`).conseling
 const onlineModel = require(`../models/index`).online
 const studentModel = require(`../models/index`).student
 const teacherModel = require(`../models/index`).teacher
+const counselingResultModel = require('../models/index').counseling_result
 const Op = require(`sequelize`).Op
 const sequelize = require('../config/connect_db').sequelize
+const seq = require(`sequelize`)
 const { getUserLogin } = require('../auth/auth')
 
 // const Sequelize = require("sequelize");
@@ -151,17 +153,95 @@ exports.getAllOnline = async (request, response) => {
 };
 
 exports.getChatSiswa = async (request, response) => {
+    // try {
+
+    //     user = getUserLogin(request)
+
+    //     let online = await sequelize.query('SELECT c.id_conseling, sp.*, th.id_teacher, th.teacher_name, th.nik, th.photo as photo_teacher ,(select count(*) from online o where o.id_user=c.id_teacher and o.tipe_user="teacher" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM student sp join conseling c on c.id_student = sp.id_student join teacher th on th.id_teacher = c.id_teacher join online  op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_student = ' + user.id_user + ' group by c.id_conseling')
+    //     return response.json({
+    //         message: 'success',
+    //         status: true,
+    //         data: online[0],
+    //     });
+
+    // } catch (error) {
+    //     console.error('Error:', error);
+    //     return response.status(500).json({
+    //         message: 'Internal Server Error',
+    //         status: false,
+    //         data: error,
+    //     });
+    // }
+
     try {
-
+        
         user = getUserLogin(request)
-
         let online = await sequelize.query('SELECT c.id_conseling, sp.*, th.id_teacher, th.teacher_name, th.nik, th.photo as photo_teacher ,(select count(*) from online o where o.id_user=c.id_teacher and o.tipe_user="teacher" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM student sp join conseling c on c.id_student = sp.id_student join teacher th on th.id_teacher = c.id_teacher join online  op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_student = ' + user.id_user + ' group by c.id_conseling')
-        return response.json({
-            message: 'success',
-            status: true,
-            data: online[0],
+        
+    
+        let id_teacher = request.params.id_teacher
+        const conseling = await counselingResultModel.findAll({
+            attributes: ['rating', 'id_counseling_result',[seq.col('conseling.id_conseling'), 'id_conseling'],[seq.col('conseling.teacher.teacher_name'),'teacher_name']],
+            order: [['createdAt', 'DESC']],
+            where: { 
+                rating: {
+                    [seq.Op.not]: null
+                }
+            },
+            include: [
+                {
+                    attributes: [],
+                    model: conselingModel,
+                    required: true,
+                    as: 'conseling',
+                    where: {
+                        isclosed: true,              
+                        id_teacher: id_teacher
+                    },
+                    include:[
+                        {
+                            attributes: [],
+                            model: teacherModel,
+                            required: true,
+                            as: 'teacher'
+                        },
+                    ]
+                },
+            ],
         });
 
+        
+        const combinedData = {
+            chatSiswa: {
+                message: 'success',
+                status: true,
+                data: online[0],
+            },
+            rating: {},
+        };
+
+        if (conseling.length > 0) {
+            const totalRating = conseling.reduce((sum, result) => sum + result.rating, 0);
+            const rataRating = totalRating / conseling.length;
+            const getGuru = await teacherModel.findOne({
+                where: { id_teacher: id_teacher }
+            });
+
+            combinedData.rating = { 
+                id_teacher: id_teacher,
+                teacher_name: getGuru.teacher_name,
+                rating: rataRating.toFixed(2),
+            };
+        } else {
+            combinedData.rating = {
+                message: 'No rating found.',
+                status: false,
+                data: null
+            };
+        }
+
+        
+        return response.json(combinedData);
     } catch (error) {
         console.error('Error:', error);
         return response.status(500).json({

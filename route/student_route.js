@@ -9,6 +9,6 @@ const validasiStudent = require('../middleware/validasi')
 app.post("/login", validasiStudent.validateStudent, studentController.Login)
 app.get("/getstudent", auth.authVerify, studentController.getAllStudent)
 app.post("/conseling_rating/:id", auth.authVerify, conselingResultController.addRating)
-app.get("/get_rating/:id_teacher", auth.authVerify, conselingResultController.getRating)
+// app.get("/get_rating/:id_teacher", auth.authVerify, conselingResultController.getRating)
 
 module.exports = app
