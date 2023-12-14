@@ -26,9 +26,9 @@ exports.addOnlineStudent = async (request, response) => {
 
     const conseling = await conselingModel.findAll({
         where: [
-            {id_teacher: request.body.id_teacher },
-            {id_student: user.id_user },
-            {isclosed: false },
+            { id_teacher: request.body.id_teacher },
+            { id_student: user.id_user },
+            { isclosed: false },
         ]
     })
 
@@ -175,13 +175,14 @@ exports.getChatSiswa = async (request, response) => {
 exports.getChatGuru = async (request, response) => {
     try {
 
+        user = getUserLogin(request)
+
         let online = await sequelize.query('SELECT c.id_conseling, sp.*, st.id_student, st.nis, st.student_name, st.photo, st.phone, st.class ,(select count(*) from online o where o.id_user=c.id_student and o.tipe_user="student" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM teacher sp join conseling c on c.id_teacher = sp.id_teacher join student st on st.id_student = c.id_student join online op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_teacher = ' + user.id_user + ' group by c.id_conseling')
         return response.json({
             message: 'success',
             status: true,
             data: online[0],
         });
-
     } catch (error) {
         console.error('Error:', error);
         return response.status(500).json({
