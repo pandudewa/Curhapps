@@ -76,11 +76,11 @@ exports.addConselingResultTeacher = async (request, response) => {
 exports.conselingClosedStudent = async (request, response) => {
     user = getUserLogin(request)
 
-    let online = await sequelize.query(" SELECT teacher_name, c.id_conseling, c.createdAt as date, c.id_student, st.student_name, c.category, 'true' as aproval, isclosed, conseling_result  FROM conseling c " +
+    let online = await sequelize.query(" SELECT teacher_name, c.id_conseling, c.createdAt as date, c.id_student, st.student_name, c.category, 'true' as aproval, isclosed, conseling_result, rating FROM conseling c " +
         "join teacher t on t.id_teacher = c.id_teacher join student st on st.id_student = c.id_student join counseling_result cr on cr.id_conseling = c.id_conseling " +
         "where  category = 'online' and isclosed = 1 and c.id_student = " + user.id_user + "  " +
         "UNION ALL " +
-        "SELECT teacher_name, c.id_conseling, meeting_date as date, c.id_student, st.student_name, c.category, aproval, isclosed, conseling_result FROM conseling c " +
+        "SELECT teacher_name, c.id_conseling, meeting_date as date, c.id_student, st.student_name, c.category, aproval, isclosed, conseling_result, rating FROM conseling c " +
         "join teacher t on t.id_teacher = c.id_teacher join student st on st.id_student = c.id_student join offline o on o.id_conseling = c.id_conseling join counseling_result cr on cr.id_conseling = c.id_conseling  " +
         "where  category = 'offline' and isclosed = 1 and c.id_student = " + user.id_user + " ")
     return response.json({
