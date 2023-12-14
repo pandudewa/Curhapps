@@ -569,12 +569,14 @@ exports.countOffline = async (request, response) => {
 }
 
 exports.countOnline = async (request, response) => {
+    user = getUserLogin(request)
 
     try {
         let countOnline = await conselingModel.findAll({
             where: {
                 category: 'online',
                 isclosed: false,
+                id_teacher: user.id_user
             },
         })
         return response.json({
