@@ -420,14 +420,21 @@ exports.upcomingOnline = async (request, response) => {
     //     });
     // }
     user = getUserLogin(request)
+    try {
+        let online = await sequelize.query(" SELECT teacher_name, conseling.createdAt as meeting_date, '1' as aproval  FROM conseling join teacher on teacher.id_teacher = conseling.id_teacher where  category = 'online' and isclosed = 0 UNION ALL SELECT teacher_name, meeting_date, aproval FROM conseling join teacher on teacher.id_teacher = conseling.id_teacher join offline on offline.id_conseling=conseling.id_conseling where  category = 'offline' and isclosed = 0 ORDER BY meeting_date desc ")
 
-    let online = await sequelize.query(" SELECT teacher_name, conseling.createdAt as meeting_date, '1' as aproval  FROM conseling join teacher on teacher.id_teacher = conseling.id_teacher where  category = 'online' and isclosed = 0 UNION ALL SELECT teacher_name, meeting_date, aproval FROM conseling join teacher on teacher.id_teacher = conseling.id_teacher join offline on offline.id_conseling=conseling.id_conseling where  category = 'offline' and isclosed = 0 ORDER BY meeting_date desc ")
-    return response.json({
-        message: 'success',
-        status: true,
-        data: online[0][0],
-        jumlah_data: online[0][0].length
-    });
+        return response.json({
+            message: 'success',
+            status: true,
+            data: online[0][0],
+            jumlah_data: online[0][0].length
+        });
+    } catch (error) {
+        return response.json({
+            message: 'failed',
+            status: false,
+        });
+    }
 };
 
 exports.lastCounselingOnline = async (request, response) => {
