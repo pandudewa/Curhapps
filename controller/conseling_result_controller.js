@@ -145,76 +145,60 @@ exports.addRating = async (request, response) => {
     })
 }
 
-// exports.getRating = async (request, response) => {
-//     let id_teacher = request.params.id_teacher
+exports.getRating = async (id_teacher) => {
+    // let id_teacher = request.params.id_teacher
 
-//     try {
-//         const conseling = await counselingResultModel.findAll({
-//             attributes: ['rating', 'id_counseling_result',[seq.col('conseling.id_conseling'), 'id_conseling'],[seq.col('conseling.teacher.teacher_name'),'teacher_name']],
-//             order: [['createdAt', 'DESC']],
-//             where: { 
-//                 rating: {
-//                 [seq.Op.not]: null
-//                 }
-//              },
-//             include: [
-//                 {
-//                     attributes: [],
-//                     model: conselingModel,
-//                     required: true,
-//                     as: 'conseling',
-//                     where: {
-//                         isclosed: true,              
-//                         id_teacher: id_teacher
-//                     },
-//                     include:[
-//                         {
-//                             attributes: [],
-//                             model: teacherModel,
-//                             required: true,
-//                             as: 'teacher'
-//                         },
-//                     ]
-//                 },
-//             ],
-//         }
-//         );
+    try {
+        const conseling = await counselingResultModel.findAll({
+            attributes: ['rating', 'id_counseling_result',[seq.col('conseling.id_conseling'), 'id_conseling'],[seq.col('conseling.teacher.teacher_name'),'teacher_name']],
+            order: [['createdAt', 'DESC']],
+            where: { 
+                rating: {
+                [seq.Op.not]: null
+                }
+             },
+            include: [
+                {
+                    attributes: [],
+                    model: conselingModel,
+                    required: true,
+                    as: 'conseling',
+                    where: {
+                        isclosed: true,              
+                        id_teacher: id_teacher
+                    },
+                    include:[
+                        {
+                            attributes: [],
+                            model: teacherModel,
+                            required: true,
+                            as: 'teacher'
+                        },
+                    ]
+                },
+            ],
+        }
+        );
 
-//         if (conseling.length > 0) {
-//             const totalRating = conseling.reduce((sum, result) => sum + result.rating, 0);
-//             const rataRating = totalRating / conseling.length;
-//             const getGuru = await teacherModel.findOne({
-//                 where: { id_teacher: id_teacher }
-//             })
-//             let result = { 
-//                 id_teacher: id_teacher,
-//                 teacher_name: getGuru.teacher_name,
-//                 rating: rataRating.toFixed(2),
-//              }
-//             return response.json({
-//                 message: 'success',
-//                 status: true,
-//                 data: {
-//                     // rating: conseling,
-//                     rating: result
-//                 }
-//             });
-//         } else {
-//             return response.json({
-//                 message: 'No rating found.',
-//                 status: false,
-//                 data: null
-//             });
-//         }
-//     } catch (error) {
-//         console.error(error);
-//         return response.status(500).json({
-//             message: 'Internal Server Error',
-//             status: false,
-//             data: null
-//         });
-//     }
-// };
+        if (conseling.length > 0) {
+            const totalRating = conseling.reduce((sum, result) => sum + result.rating, 0);
+            const rataRating = totalRating / conseling.length;
+            const getGuru = await teacherModel.findOne({
+                where: { id_teacher: id_teacher }
+            })
+            let result = { 
+                id_teacher: id_teacher,
+                teacher_name: getGuru.teacher_name,
+                rating: rataRating.toFixed(2),
+             }
+            return result;
+        } else {
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+};
 
 exports.conselingResult = async (request, response) => {
     const user = getUserLogin(request)

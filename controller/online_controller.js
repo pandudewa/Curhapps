@@ -9,6 +9,7 @@ const Op = require(`sequelize`).Op
 const sequelize = require('../config/connect_db').sequelize
 const seq = require(`sequelize`)
 const { getUserLogin } = require('../auth/auth')
+const rating = require('./conseling_result_controller')
 
 // const Sequelize = require("sequelize");
 // const sequelize = new Sequelize("curhapss", "bk", "magangjesicabk", {
@@ -177,71 +178,61 @@ exports.getChatSiswa = async (request, response) => {
         
         user = getUserLogin(request)
         let online = await sequelize.query('SELECT c.id_conseling, sp.*, th.id_teacher, th.teacher_name, th.nik, th.photo as photo_teacher ,(select count(*) from online o where o.id_user=c.id_teacher and o.tipe_user="teacher" and o.id_conseling = c.id_conseling ) as jumlah_chat FROM student sp join conseling c on c.id_student = sp.id_student join teacher th on th.id_teacher = c.id_teacher join online  op on op.id_conseling=c.id_conseling where c.isclosed = 0 and c.id_student = ' + user.id_user + ' group by c.id_conseling')
-        
-    
-        let id_teacher = request.params.id_teacher
-        const conseling = await counselingResultModel.findAll({
-            attributes: ['rating', 'id_counseling_result',[seq.col('conseling.id_conseling'), 'id_conseling'],[seq.col('conseling.teacher.teacher_name'),'teacher_name']],
-            order: [['createdAt', 'DESC']],
-            where: { 
-                rating: {
-                    [seq.Op.not]: null
-                }
-            },
-            include: [
-                {
-                    attributes: [],
-                    model: conselingModel,
-                    required: true,
-                    as: 'conseling',
-                    where: {
-                        isclosed: true,              
-                        id_teacher: id_teacher
-                    },
-                    include:[
-                        {
-                            attributes: [],
-                            model: teacherModel,
-                            required: true,
-                            as: 'teacher'
-                        },
-                    ]
-                },
-            ],
-        });
+        let object = []
+        for (const conseling of online[0]){
+            let rating_data = await rating.getRating(conseling.id_teacher);
 
-        
-        const combinedData = {
-            chatSiswa: {
-                message: 'success',
-                status: true,
-                data: online[0],
-            },
-            rating: {},
-        };
-
-        if (conseling.length > 0) {
-            const totalRating = conseling.reduce((sum, result) => sum + result.rating, 0);
-            const rataRating = totalRating / conseling.length;
-            const getGuru = await teacherModel.findOne({
-                where: { id_teacher: id_teacher }
+            object.push({
+                conseling,
+                rating: rating_data,
             });
-
-            combinedData.rating = { 
-                id_teacher: id_teacher,
-                teacher_name: getGuru.teacher_name,
-                rating: rataRating.toFixed(2),
-            };
-        } else {
-            combinedData.rating = {
-                message: 'No rating found.',
-                status: false,
-                data: null
-            };
+            // console.log(id.id_teacher);
         }
+        // online[0].forEach(async (v) => {
+        //     const rating = await rating.getRating(v.id_teacher)
+        //     object.push({rating: rating})
+        //     console.log(rating)
+        // });
+        
+        return response.json({
+            data: object
+        })
+
+        // const combinedData = {
+        //     chatSiswa: {
+        //         message: 'success',
+        //         status: true,
+        //         data: online[0],
+        //     },
+        //     rating: {},
+        // };
+
+        // if (conseling.length > 0) {
+        //     const totalRating = conseling.reduce((sum, result) => sum + result.rating, 0);
+        //     const rataRating = totalRating / conseling.length;
+        //     const getGuru = await teacherModel.findOne({
+        //         where: { id_teacher: id_teacher }
+        //     });
+
+        //     combinedData.rating = { 
+        //         id_teacher: id_teacher,
+        //         teacher_name: getGuru.teacher_name,
+        //         rating: rataRating.toFixed(2),
+        //     };
+        // } else {
+        //     combinedData.rating = {
+        //         message: 'No rating found.',
+        //         status: false,
+        //         data: null
+        //     };
+        // }
 
         
-        return response.json(combinedData);
+        // return response.json({ 
+        //     id_teacher: id_teacher,
+        //     teacher_name: getGuru.teacher_name,
+        //     rating: rataRating.toFixed(2),
+        // });
     } catch (error) {
         console.error('Error:', error);
         return response.status(500).json({
